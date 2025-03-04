@@ -1,0 +1,19 @@
+# Exclure les dépendances Node.js
+node_modules/
+dist/
+build/
+
+# Exclure les fichiers temporaires de macOS
+.DS_Store
+
+# Exclure les fichiers de logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Exclure les fichiers de build .NET
+bin/
+obj/
+.vscode/
+
