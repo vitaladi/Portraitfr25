@@ -165,3 +165,4 @@
 /Users/vitouswr/PortraitFrAward/Backend/bin/Debug/net9.0/Scrutor.dll
 /Users/vitouswr/PortraitFrAward/Backend/bin/Debug/net9.0/Swashbuckle.AspNetCore.Filters.dll
 /Users/vitouswr/PortraitFrAward/Backend/bin/Debug/net9.0/Swashbuckle.AspNetCore.Filters.Abstractions.dll
+/Users/vitouswr/PortraitFrAward/Backend/obj/Debug/net9.0/Backend.sourcelink.json
