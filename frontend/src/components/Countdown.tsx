@@ -42,7 +42,7 @@ const Countdown = ({ onEnd }: { onEnd: () => void }) => {
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
           <div className="text-center">
-            <span className="block text-[100px] md:text-[120px] font-bold">{timeLeft.days}</span>
+            <span className="block text-[50px] md:text-[120px] font-bold">{timeLeft.days}</span>
             <span className="text-lg md:text-xl text-white">Jours</span>
           </div>
           <div className="text-center">
