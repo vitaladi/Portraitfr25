@@ -11,20 +11,22 @@ var appUrl = $"http://+:{port}";
 builder.WebHost.UseUrls(appUrl);
 
 
-// 🔥 Utilisation des variables d’environnement pour la connexion Supabase
-var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL")?.Replace("\"", "");
+var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
 
-if (string.IsNullOrEmpty(connectionString))
+if (!string.IsNullOrEmpty(connectionString) && connectionString.StartsWith("postgres://"))
 {
-    throw new InvalidOperationException("❌ ERREUR: DATABASE_URL n'est pas défini dans les variables d'environnement.");
+    var databaseUri = new Uri(connectionString);
+    var userInfo = databaseUri.UserInfo.Split(':');
+    connectionString = $"Host={databaseUri.Host};Port={databaseUri.Port};Database={databaseUri.AbsolutePath.TrimStart('/')};Username={userInfo[0]};Password={userInfo[1]};SSL Mode=Require;Trust Server Certificate=true";
+}
+else
+{
+    connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 }
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString));
 
-
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(connectionString));
 
 // Activer les contrôleurs API
 builder.Services.AddControllers();
