@@ -2,7 +2,9 @@ import { BrowserRouter as Router, Route, Routes, useLocation } from "react-route
 import { AnimatePresence, motion } from "framer-motion";
 import Inscription from "./pages/Inscription";
 import Participants from "./pages/Participants";
+import Partners from "./pages/Partners";
 import Home from "./pages/Home";
+import Tickets from "./pages/Tickets";
 import Awards from "./pages/Awards";
 import FAQ from "./pages/FAQ";
 import Contact from "./pages/Contact";
@@ -18,9 +20,12 @@ function AnimatedRoutes() {
         <Route path="/" element={<PageTransition><Home /></PageTransition>} />
         <Route path="/inscription" element={<PageTransition><Inscription /></PageTransition>} />
         <Route path="/participants" element={<PageTransition><Participants /></PageTransition>} />
+        <Route path="/partners" element={<PageTransition><Partners /></PageTransition>} />
         <Route path="/awards" element={<PageTransition><Awards /></PageTransition>} />
+        <Route path="/tickets" element={<PageTransition><Tickets /></PageTransition>} />
         <Route path="/faq" element={<PageTransition><FAQ /></PageTransition>} />
         <Route path="/contact" element={<PageTransition><Contact /></PageTransition>} />
+
       </Routes>
     </AnimatePresence>
   );
