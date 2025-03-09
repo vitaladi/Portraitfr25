@@ -34,8 +34,7 @@ namespace PortraitFrAward.Controllers
             [FromForm] string instagram,
             [FromForm] string email,
             [FromForm] string categorie,
-            [FromForm] string ville, // 🚀 Ajout de la ville
-
+            [FromForm] string ville,
             [FromForm] string description,
             [FromForm] bool certificatPhoto,
             [FromForm] IFormFile? photo)
@@ -46,8 +45,7 @@ namespace PortraitFrAward.Controllers
                     string.IsNullOrWhiteSpace(instagram) ||
                     string.IsNullOrWhiteSpace(email) ||
                     string.IsNullOrWhiteSpace(categorie) ||
-                    string.IsNullOrWhiteSpace(ville)) // ✅ Vérification de la ville
-
+                    string.IsNullOrWhiteSpace(ville))
                 {
                     return BadRequest(new { message = "Tous les champs sont requis." });
                 }
@@ -62,15 +60,17 @@ namespace PortraitFrAward.Controllers
                 {
                     return BadRequest(new { message = "Catégorie invalide." });
                 }
-                  var existingParticipant = await _context.Participants
-            .FirstOrDefaultAsync(p => p.Email == email || p.Instagram == instagram);
 
-        if (existingParticipant != null)
-        {
-            return Conflict(new { message = "Un participant avec cet email ou cet Instagram est déjà inscrit." });
-        }
+                // Vérifier si l'utilisateur existe déjà
+                var existingParticipant = await _context.Participants
+                    .FirstOrDefaultAsync(p => p.Email.ToLower() == email.ToLower() || p.Instagram.ToLower() == instagram.ToLower());
 
-                // Vérifier si une photo a été envoyée et que le certificat est coché
+                if (existingParticipant != null)
+                {
+                    return Conflict(new { message = "Un participant avec cet email ou cet Instagram est déjà inscrit." });
+                }
+
+                // Vérifier que le certificat est bien coché si une photo est ajoutée
                 if (photo != null && !certificatPhoto)
                 {
                     return BadRequest(new { message = "Vous devez certifier l’authenticité de la photo." });
@@ -81,25 +81,25 @@ namespace PortraitFrAward.Controllers
                 {
                     try
                     {
-                        var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
+                        // 🚀 Utilisation d'un dossier temporaire pour Railway
+                        var uploadPath = Path.Combine(Path.GetTempPath(), "uploads");
                         if (!Directory.Exists(uploadPath))
                         {
                             Directory.CreateDirectory(uploadPath);
                         }
 
-                   // Générer un nom de fichier basé sur l'Instagram
-                string fileExtension = Path.GetExtension(photo.FileName);
-                string fileName = $"{Path.GetFileNameWithoutExtension(photo.FileName)}-@{instagram}{fileExtension}";
-                string filePath = Path.Combine(uploadPath, fileName);
+                        // Générer un nom de fichier basé sur l'Instagram
+                        string fileExtension = Path.GetExtension(photo.FileName);
+                        string fileName = $"{Path.GetFileNameWithoutExtension(photo.FileName)}-@{instagram}{fileExtension}";
+                        string filePath = Path.Combine(uploadPath, fileName);
 
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await photo.CopyToAsync(stream);
-                }
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await photo.CopyToAsync(stream);
+                        }
 
                         photoUrl = $"/uploads/{fileName}";
-                                        _logger.LogInformation("Photo enregistrée : " + photoUrl);
-
+                        _logger.LogInformation($"Photo enregistrée : {photoUrl}");
                     }
                     catch (Exception ex)
                     {
@@ -114,8 +114,7 @@ namespace PortraitFrAward.Controllers
                     Instagram = instagram,
                     Email = email,
                     Categorie = categorie,
-                    Ville = ville, // 🚀 Ajout de la ville
-
+                    Ville = ville,
                     Description = description,
                     PhotoUrl = photoUrl,
                     CertificatPhoto = certificatPhoto,
@@ -151,48 +150,49 @@ namespace PortraitFrAward.Controllers
                 return StatusCode(500, new { message = "Erreur interne du serveur." });
             }
         }
+
         [HttpGet("participants")]
-public async Task<IActionResult> GetParticipants()
-{
-    var participants = await _context.Participants.ToListAsync();
-    return Ok(participants);
-}
-[HttpGet("list")]
-public async Task<IActionResult> GetParticipants(
-    [FromQuery] int page = 1,
-    [FromQuery] int pageSize = 10,
-    [FromQuery] string? categorie = null)
-{
-    var query = _context.Participants.AsQueryable();
+        public async Task<IActionResult> GetParticipants()
+        {
+            var participants = await _context.Participants.ToListAsync();
+            return Ok(participants);
+        }
 
-    if (!string.IsNullOrEmpty(categorie))
-    {
-        query = query.Where(p => p.Categorie == categorie);
-    }
+        [HttpGet("list")]
+        public async Task<IActionResult> GetParticipants(
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 10,
+            [FromQuery] string? categorie = null)
+        {
+            var query = _context.Participants.AsQueryable();
 
-    var totalParticipants = await query.CountAsync();
-    var participants = await query
-        .Skip((page - 1) * pageSize)
-        .Take(pageSize)
-        .Select(p => new 
-        { 
-            p.Nom, 
-            p.Instagram, 
-            p.Email, 
-            p.Categorie,
-            p.Ville, // 👈 Ajout du champ ville
-            p.Description,
-            p.PhotoUrl // 👈 Ajout du champ photo_url
-        })
-        .ToListAsync();
+            if (!string.IsNullOrEmpty(categorie))
+            {
+                query = query.Where(p => p.Categorie == categorie);
+            }
 
-    return Ok(new
-    {
-        totalParticipants,
-        totalPages = (int)Math.Ceiling((double)totalParticipants / pageSize),
-        participants
-    });
-}
+            var totalParticipants = await query.CountAsync();
+            var participants = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(p => new
+                {
+                    p.Nom,
+                    p.Instagram,
+                    p.Email,
+                    p.Categorie,
+                    p.Ville,
+                    p.Description,
+                    p.PhotoUrl
+                })
+                .ToListAsync();
 
+            return Ok(new
+            {
+                totalParticipants,
+                totalPages = (int)Math.Ceiling((double)totalParticipants / pageSize),
+                participants
+            });
+        }
     }
 }

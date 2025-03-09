@@ -17,8 +17,8 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
 COPY --from=build /app/Backend/out ./
 
-# Exposer le port 5000
-ENV ASPNETCORE_URLS=http://+:5000
+# ✅ 🔥 Modifier l'URL d'écoute pour Railway
+ENV ASPNETCORE_URLS=http://+:${PORT:-5000}
 EXPOSE 5000
 
 # Lancer l'application

@@ -6,23 +6,29 @@ using System.Linq;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Ajouter la connexion à Supabase
+// 🔥 Utilisation des variables d’environnement pour la connexion Supabase
+var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL") ?? builder.Configuration.GetConnectionString("DefaultConnection");
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(connectionString));
 
 // Activer les contrôleurs API
 builder.Services.AddControllers();
 
-// Configurer CORS pour permettre au frontend React d'accéder au backend
+// ✅ Configuration CORS pour autoriser Netlify en production et localhost en dev
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend",
-        policy => policy.WithOrigins("http://localhost:3000") // Remplacez par l'URL de votre frontend
-                        .AllowAnyMethod()
-                        .AllowAnyHeader());
+        policy => policy
+            .WithOrigins(
+                builder.Environment.IsDevelopment() ? "http://localhost:3000" : "https://testpfrawards25.netlify.app"
+            )
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+    );
 });
 
-// Ajouter Swagger pour documenter l'API
+// ✅ Swagger pour documenter l’API
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -30,32 +36,38 @@ builder.Services.AddSwaggerGen(c =>
 
     // Configuration pour gérer les fichiers uploadés
     c.OperationFilter<SwaggerFileOperationFilter>();
-
 });
 
 var app = builder.Build();
 
-// Middleware CORS
+// ✅ Rediriger en HTTPS en production
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
+
+// ✅ Middleware CORS
 app.UseCors("AllowFrontend");
 
-app.UseStaticFiles(); // 🚀 Cette ligne est essentielle pour charger les fichiers de wwwroot
+app.UseStaticFiles(); // 🚀 Essentiel pour charger les fichiers de wwwroot/uploads
 
-// Middleware d'autorisation
+// ✅ Middleware d'autorisation
 app.UseAuthorization();
 
-// Mapper les contrôleurs
+// ✅ Mapper les contrôleurs
 app.MapControllers();
 
-// Activer Swagger UI en développement
-if (app.Environment.IsDevelopment())
+// ✅ Activer Swagger en mode développement ET PRODUCTION sur Railway
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "PortraitFr Award API v1");
+    c.RoutePrefix = "swagger"; // Accès via /swagger
+});
 
 app.Run();
 
-// Classe pour gérer les fichiers uploadés dans Swagger
+// ✅ Classe pour gérer les fichiers uploadés dans Swagger
 public class SwaggerFileOperationFilter : IOperationFilter
 {
     public void Apply(OpenApiOperation operation, OperationFilterContext context)

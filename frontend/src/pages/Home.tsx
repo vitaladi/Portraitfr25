@@ -24,7 +24,7 @@ export default function Home() {
       {/* Contenu principal */}
       <div className="relative z-10 flex flex-col items-center justify-center text-center space-y-10">
         <AnimatedSection>
-          <h1 className="text-5xl font-bold text-orange-500">Portrait Fr Award 2025</h1>
+          <h1 className="text-5xl font-bold text-orange-500">Portrait Fr Awards 2025</h1>
           <p className="text-lg text-white-500">
             {isCountdownOver ? "Participe ici" : "Participation dans"}
           </p>
