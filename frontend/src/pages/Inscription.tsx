@@ -23,16 +23,15 @@ const Inscription = () => {
         </h1>
 
         {/* Iframe du formulaire Notion */}
-        <div className="w-full h-[600px] bg-black rounded-lg overflow-hidden shadow-lg">
-          <iframe 
-            src="https://vitaladi.notion.site/ebd/1a3dcd06d5ca80aca76cf10a15f18389" 
+        <iframe 
+            title="Formulaire d'inscription"
+            src="https://vitaladi.notion.site/ebd/1a3dcd06d5ca80aca76cf10a15f18389"
             width="100%" 
             height="600" 
             frameBorder="0" 
-            allowFullScreen
-            className="w-full h-full rounded-lg"
-          />
-        </div>
+            allowFullScreen 
+        />
+
 
         {/* Affichage du compteur sous l'iframe 
         <p className="mt-6 text-lg text-orange-400">
