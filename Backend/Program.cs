@@ -6,8 +6,12 @@ using System.Linq;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// 🔥 Récupération du port Railway ou défaut 5000
+var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
+
 // 🔥 Utilisation des variables d’environnement pour la connexion Supabase
-var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL") ?? builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL") 
+    ?? builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString));
@@ -64,6 +68,9 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "PortraitFr Award API v1");
     c.RoutePrefix = "swagger"; // Accès via /swagger
 });
+
+// ✅ Utilisation du port dynamique pour Railway
+app.Urls.Add($"http://*:{port}");
 
 app.Run();
 
