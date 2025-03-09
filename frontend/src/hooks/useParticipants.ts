@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 // ✅ Utilisation d'une variable d'environnement pour l'URL de l'API
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:5094/api";
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:5095/api";
 
 const useParticipants = () => {
   const [count, setCount] = useState<number | null>(null);

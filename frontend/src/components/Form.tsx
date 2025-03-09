@@ -57,7 +57,7 @@ const Form = () => {
     }
 
     try {
-      const response = await axios.post("http://localhost:5094/api/participant/inscription", data, {
+      const response = await axios.post("http://localhost:5095/api/participant/inscription", data, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 

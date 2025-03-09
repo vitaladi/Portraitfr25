@@ -50,6 +50,8 @@ export const getParticipants = async (
     const response = await api.get("/participant/list", {
       params: { page, pageSize, categorie },
     });
+    console.log("Réponse API Backend :", response.data); // 🔍 Debug ici
+
     return response.data;
   } catch (error) {
     const erreur = error as any;

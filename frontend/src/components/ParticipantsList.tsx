@@ -80,10 +80,10 @@ const ParticipantsList = () => {
                   >
                     {/* Affichage de l'image avec vérification */}
                     <img
-                      src={p.photoUrl ? `http://localhost:5094${p.photoUrl}` : "/images/default-avatar.png"}
+                      src={p.photoUrl ? `http://localhost:5095${p.photoUrl}` : "/images/default-avatar.png"}
                       alt={p.nom}
                       className="w-full h-48 object-cover rounded-lg mb-4 cursor-pointer hover:scale-105 transition duration-300"
-                      onClick={() => setSelectedPhoto(p.photoUrl ? `http://localhost:5094${p.photoUrl}` : null)}
+                      onClick={() => setSelectedPhoto(p.photoUrl ? `http://localhost:5095${p.photoUrl}` : null)}
                       onError={(e) => {
                         e.currentTarget.src = "/images/default-avatar.png"; // Fallback en cas d'erreur
                       }}

@@ -24,7 +24,7 @@ const Contact = () => {
     setErrorMessage("");
 
     try {
-      const response = await axios.post("http://localhost:5094/api/contact", formData, {
+      const response = await axios.post("http://localhost:5095/api/contact", formData, {
         headers: { "Content-Type": "application/json" },
       });
 
