@@ -23,6 +23,10 @@ public class FileUploadOperationFilter : IOperationFilter
                                 ["instagram"] = new OpenApiSchema { Type = "string" },
                                 ["email"] = new OpenApiSchema { Type = "string", Format = "email" },
                                 ["categorie"] = new OpenApiSchema { Type = "string" },
+                                ["ville"] = new OpenApiSchema { Type = "string" },
+                                ["description"] = new OpenApiSchema { Type = "string" },
+                                ["certificatPhoto"] = new OpenApiSchema { Type = "boolean" },
+                            
                                 ["description"] = new OpenApiSchema { Type = "string" }
                             }
                         }
