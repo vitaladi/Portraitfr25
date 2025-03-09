@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const images = Array.from({ length: 21 }, (_, i) => `/images/img${i + 1}.jpg`);
+// Générer et mélanger les images de manière aléatoire
+const shuffleArray = (array: string[]) => {
+  return array.sort(() => Math.random() - 0.5);
+};
+
+const images = shuffleArray(Array.from({ length: 21 }, (_, i) => `/images/img${i + 1}.jpg`));
 
 const BackgroundSlider = () => {
   const [index, setIndex] = useState(0);
@@ -21,7 +26,7 @@ const BackgroundSlider = () => {
           key={index}
           className="absolute inset-0 w-full h-full"
           initial={{ opacity: 0 }}
-          animate={{ opacity: 0.5 }}
+          animate={{ opacity: 0.5 }} // Maintien de l'opacité
           exit={{ opacity: 0 }}
           transition={{ duration: 1 }}
           style={{
