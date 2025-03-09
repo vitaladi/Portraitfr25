@@ -6,7 +6,10 @@ using System.Linq;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var port = Environment.GetEnvironmentVariable("PORT") ?? "5095";
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080"; // 🔥 Utilise le port défini par Railway
+var appUrl = $"http://+:{port}";
+builder.WebHost.UseUrls(appUrl);
+
 
 // 🔥 Utilisation des variables d’environnement pour la connexion Supabase
 var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL") 
