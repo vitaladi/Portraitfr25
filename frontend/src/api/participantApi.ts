@@ -20,7 +20,10 @@ export const inscrireParticipant = async (formData: FormData) => {
     return response.data;
   } catch (error: any) {
     console.error("❌ Erreur lors de l'inscription :", error);
+    const err = error as any;
+    console.log("Logs d'erreur:", err.response?.data);
     throw new Error(error.response?.data?.message || "Erreur inconnue lors de l'inscription");
+      
   }
 };
 
@@ -30,6 +33,8 @@ export const getNombreParticipants = async (): Promise<number> => {
     const response = await api.get("/participant/count");
     return response.data.count;
   } catch (error) {
+    const err = error as any;
+    console.log("Logs d'erreur:", err.response?.data);
     console.error("❌ Erreur lors de la récupération du nombre de participants :", error);
     return 0; // Retourne 0 en cas d'erreur
   }
@@ -47,6 +52,8 @@ export const getParticipants = async (
     });
     return response.data;
   } catch (error) {
+    const erreur = error as any;
+    console.log("Logs d'erreur:", erreur.response?.data);
     console.error("❌ Erreur lors de la récupération des participants :", error);
     return { totalParticipants: 0, totalPages: 0, participants: [] }; // Retourne des valeurs par défaut
   }
