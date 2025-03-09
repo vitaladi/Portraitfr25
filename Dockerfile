@@ -13,10 +13,10 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
 COPY --from=build-env /app/out .
 
-
-# Configurer le bon port pour Railway
-ENV ASPNETCORE_URLS=http://+:5000
-EXPOSE 5000
+# 🔥 Utilisation du port défini par Railway (évite le port fixe)
+ENV PORT=8080
+ENV ASPNETCORE_URLS=http://+:${PORT}
+EXPOSE 8080  
 
 # Lancer l'application
 ENTRYPOINT ["dotnet", "Backend.dll"]
