@@ -12,8 +12,16 @@ builder.WebHost.UseUrls(appUrl);
 
 
 // 🔥 Utilisation des variables d’environnement pour la connexion Supabase
-var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL") 
-    ?? builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL")?.Replace("\"", "");
+
+if (string.IsNullOrEmpty(connectionString))
+{
+    throw new InvalidOperationException("❌ ERREUR: DATABASE_URL n'est pas défini dans les variables d'environnement.");
+}
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseNpgsql(connectionString));
+
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString));
