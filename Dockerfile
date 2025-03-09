@@ -4,12 +4,8 @@ WORKDIR /app
 
 # Copier uniquement le fichier projet pour optimiser le cache
 COPY . ./
-# Définir le bon dossier avant la restauration
-WORKDIR /app/Backend
-RUN dotnet restore
 
 # Copier tout le reste et compiler en mode Release
-COPY Backend/. .
 RUN dotnet publish -c Release -o out
 
 # Étape 2 : Image d'exécution (runtime)
