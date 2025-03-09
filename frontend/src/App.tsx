@@ -46,7 +46,7 @@ function PageTransition({ children }: { children: React.ReactNode }) {
 
 function App() {
   return (
-    <Router>
+    <Router basename="/">
       <ScrollProgress />
       <Header />
       <AnimatedRoutes />

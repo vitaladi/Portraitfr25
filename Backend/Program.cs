@@ -7,7 +7,7 @@ using System.Linq;
 var builder = WebApplication.CreateBuilder(args);
 
 // 🔥 Récupération du port Railway ou défaut 5000
-var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
+var port = Environment.GetEnvironmentVariable("PORT") ?? "5095";
 
 // 🔥 Utilisation des variables d’environnement pour la connexion Supabase
 var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL") 
